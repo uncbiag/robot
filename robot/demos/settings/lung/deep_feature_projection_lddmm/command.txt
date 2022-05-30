@@ -1,0 +1,8 @@
+python run_task.py  -ds=/playpen-raid1/zyshen/data/flying3d_nonocc -o /playpen-raid1/zyshen/data/flyingkitti_nonocc -tn deepflow_pwc_finetune -ts /playpen-raid1/zyshen/proj/robot/robot/experiments/settings/flying3d/deepflow_pwc_finetune -g 0
+id 9 and current name is : ['copd5']
+the current running_score:0.002201213501393795
+the current average running_score:0.00144760946277529
+the current average running detailed score:{'score': 0.00144760946277529, 'ot_dist': 0.00144760946277529, 'lmk_diff_mean': 6.333870816230774, 'lmk_diff_var': 42.836057090759276, 'lmk_diff_mean_and_gf': 5.951123905181885, 'lmk_diff_var_and_gf': 45.636258125305176}
+the average test_score: 0.0014
+the average time for per image is 9.7228018283844
+the size of 10 is test, evaluation complete in 1m 40s

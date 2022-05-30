@@ -1,0 +1,85 @@
+0 epoch_val_score: 0.0517
+0 epoch_val_loss: 0.0517
+0 epoch_val_ot_dist: 0.0241
+0 epoch_val_EPE3D: 0.0277
+0 epoch_val_ACC3DS: 0.9448
+0 epoch_val_ACC3DR: 0.9801
+0 epoch_val_Outliers3D: 0.0973
+0 epoch_val_EPE2D: 1.5478
+0 epoch_val_ACC2D: 0.9432
+0 epoch_val_EPE3D_and_gf: 0.0342
+0 epoch_val_ACC3DS_and_gf: 0.9004
+0 epoch_val_ACC3DR_and_gf: 0.9882
+0 epoch_val_Outliers3D_and_gf: 0.2460
+0 epoch_val_EPE2D_and_gf: 1.8646
+0 epoch_val_ACC2D_and_gf: 0.9031
+0 epoch_val_val_score: 0.0517
+
+
+
+
+"geom_obj": "geomloss.SamplesLoss(loss='sinkhorn',blur=0.05, scaling=0.8,reach=1.,debias=False, backend='online')"
+
+0 epoch_val_score: 0.0517
+0 epoch_val_loss: 0.0517
+0 epoch_val_ot_dist: 0.0068
+0 epoch_val_EPE3D: 0.0277
+0 epoch_val_ACC3DS: 0.9448
+0 epoch_val_ACC3DR: 0.9801
+0 epoch_val_Outliers3D: 0.0973
+0 epoch_val_EPE2D: 1.5478
+0 epoch_val_ACC2D: 0.9432
+0 epoch_val_EPE3D_and_gf: 0.0204
+0 epoch_val_ACC3DS_and_gf: 0.9793
+0 epoch_val_ACC3DR_and_gf: 0.9891
+0 epoch_val_Outliers3D_and_gf: 0.0944
+0 epoch_val_EPE2D_and_gf: 1.1880
+0 epoch_val_ACC2D_and_gf: 0.9710
+0 epoch_val_val_score: 0.0517
+
+
+
+
+
+
+"geom_obj": "geomloss.SamplesLoss(loss='sinkhorn',blur=0.05, scaling=0.8,reach=0.5,debias=False, backend='online')"
+
+
+0 epoch_val_score: 0.0517
+0 epoch_val_loss: 0.0517
+0 epoch_val_ot_dist: 0.0066
+0 epoch_val_EPE3D: 0.0277
+0 epoch_val_ACC3DS: 0.9448
+0 epoch_val_ACC3DR: 0.9801
+0 epoch_val_Outliers3D: 0.0973
+0 epoch_val_EPE2D: 1.5478
+0 epoch_val_ACC2D: 0.9432
+0 epoch_val_EPE3D_and_gf: 0.0212
+0 epoch_val_ACC3DS_and_gf: 0.9776
+0 epoch_val_ACC3DR_and_gf: 0.9886
+0 epoch_val_Outliers3D_and_gf: 0.0966
+0 epoch_val_EPE2D_and_gf: 1.2363
+0 epoch_val_ACC2D_and_gf: 0.9682
+0 epoch_val_val_score: 0.0517
+
+
+
+"geom_obj": "geomloss.SamplesLoss(loss='sinkhorn',blur=0.1, scaling=0.8,reach=None,debias=False, backend='online')"
+
+global_step:0, val score is0.03051977706491016
+0 epoch_val_score: 0.0517
+0 epoch_val_loss: 0.0517
+0 epoch_val_ot_dist: 0.0007
+0 epoch_val_EPE3D: 0.0277
+0 epoch_val_ACC3DS: 0.9448
+0 epoch_val_ACC3DR: 0.9801
+0 epoch_val_Outliers3D: 0.0973
+0 epoch_val_EPE2D: 1.5478
+0 epoch_val_ACC2D: 0.9432
+0 epoch_val_EPE3D_and_gf: 0.0078
+0 epoch_val_ACC3DS_and_gf: 0.9790
+0 epoch_val_ACC3DR_and_gf: 0.9880
+0 epoch_val_Outliers3D_and_gf: 0.0172
+0 epoch_val_EPE2D_and_gf: 0.5268
+0 epoch_val_ACC2D_and_gf: 0.9767
+0 epoch_val_val_score: 0.0517

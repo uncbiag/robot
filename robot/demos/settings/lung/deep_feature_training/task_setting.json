@@ -1,0 +1,94 @@
+{
+    "dataset": {
+        "name": "pair_dataset",
+        "pair_dataset": {
+            "reader" : "lung_dataloader_utils.lung_reader()",
+            "sampler" : "lung_dataloader_utils.lung_sampler( method='combined',scale=0.0003,num_sample=60000,sampled_by_weight=True)",
+            "normalizer": "lung_dataloader_utils.lung_normalizer(weight_scale=60000,scale=[100,100,100])",
+            "pair_postprocess_obj": "lung_dataloader_utils.lung_pair_postprocess()",
+            "max_num_for_loading": [800,20,20,-1],
+            "enlarge_dataset_size_by_factor": 10,
+            "load_training_data_into_memory": true,
+            "aug_data_via_inverse_reg_direction": false
+        }
+    },
+    "tsk_set": {
+        "batch_sz": [
+            4,
+            4,
+            1,
+            4
+        ],
+        "epoch": 300,
+        "gpu_ids": 0,
+        "max_batch_num_per_epoch": [
+            400,
+            4,
+            4
+        ],
+        "model": "deep_learning",
+        "method_name": "feature_deep",
+        "prepare_input_object": "hybird_data.HybirdData(synthsizer_obj='lung_data_aug.lung_synth_data(do_rigid_aug=True)', data_aug_obj='lung_data_aug.lung_aug_data()', raw_source_target_has_corr=False,corr_sampled_source_target=False, synth_ratio=1.0, ratio_decay_rate=-1, min_synth_ratio=0.5,npoints=-1)",
+        "capture_plot_obj": "lung_visualizer.lung_capture_plotter(add_bg_contrast=False,camera_pos=[(-4.924379645467042, 2.17374925796456, 1.5003730890759344),(0.0, 0.0, 0.0),(0.40133888001174545, 0.31574165540339943, 0.8597873634998591)])",
+        "val_period": 5,
+        "feature_deep": {
+            "deep_extractor": "pointconv_extractor",
+            "pointconv_extractor": {
+                "local_pair_feature_extractor_obj": "lung_feature_extractor.get_naive_lung_feature(include_xyz=False, weight_factor=1000)",
+                "input_channel": 1,
+                "output_channel": 15,
+                "param_shrink_factor": 1,
+                "initial_npoints": 4096,
+                "initial_radius": 0.001,
+                "include_pos_in_final_feature": false,
+                "use_aniso_kernel": true
+            },
+            "deepfea_loss": {
+                "loss_type": "naive_corres",
+                "geomloss": {
+                    "attr": "pointfea",
+                    "geom_obj": "geomloss.SamplesLoss(loss='sinkhorn',blur=0.01, scaling=0.8,reach=None,debias=False, backend='online')",
+                    "mode": "soft"
+                }
+            },
+            "sim_factor": 100.0,
+            "reg_factor_init": 0.1,
+
+            "reg_factor_decay": 6,
+            "static_epoch": 5,
+            "spline_kernel_obj": "point_interpolator.NadWatIsoSpline(exp_order=2,kernel_scale=0.05)",
+            "interp_kernel_obj": "point_interpolator.NadWatIsoSpline(exp_order=2,kernel_scale=0.005)",
+            "external_evaluate_metric_obj": "lung_data_eval.evaluate_res(visualize_fea=False)",
+            "print_step": 10,
+            "saving_running_result_visualize": true,
+            "geom_loss_opt_for_eval": {
+                "attr": "points",
+                "geom_obj": "geomloss.SamplesLoss(loss='sinkhorn',blur=0.001, scaling=0.8,reach=None, debias=False, backend='online')"
+            }
+        },
+        "optim": {
+            "type": "adam",
+            "lr": 0.001,
+            "adam": {
+                "betas": [
+                    0.9,
+                    0.999
+                ]
+            }
+        },
+        "scheduler": {
+            "type": "step_lr",
+            "step_lr": {
+                "gamma": 0.5,
+                "step_size": 60
+            }
+        },
+        "save_fig_on": true,
+        "is_train": true,
+        "reset_train_epoch": false,
+        "load_model_but_train_from_epoch": 0,
+        "continue_train": false,
+        "continue_train_lr": 2.5e-5,
+        "model_path":""
+    }
+}

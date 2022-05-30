@@ -1,0 +1,86 @@
+{
+    "dataset": {
+        "name": "custom_dataset",
+        "custom_dataset": {
+            "name": "modelnet40_dataset_utils.ModelNet40",
+            "num_subsampled_points": 1024,
+            "partial_only_during_test": false
+        }
+    },
+    "tsk_set": {
+        "batch_sz": [
+            24,
+            4,
+            1,
+            4
+        ],
+        "epoch": 300,
+        "gpu_ids": 0,
+        "max_batch_num_per_epoch": [
+            400,
+            10,
+            4
+        ],
+        "model": "deep_learning",
+        "method_name": "feature_deep",
+        "val_period": 5,
+        "feature_deep": {
+            "deep_extractor": "pointnet2_extractor",
+            "pointnet2_extractor": {
+                "local_pair_feature_extractor_obj": "local_feature_extractor.default_local_pair_feature_extractor()",
+                "input_channel": 3,
+                "output_channel": 30,
+                "initial_radius": 0.001,
+                "include_pos_in_final_feature": false,
+                "use_aniso_kernel": false
+            },
+            "deepfea_loss": {
+                "loss_type": "naive_corres",
+                "soften_gt_sigma": 0.02,
+                "geomloss": {
+                    "attr": "pointfea",
+                    "geom_obj": "geomloss.SamplesLoss(loss='sinkhorn',blur=0.01, scaling=0.8,reach=None,debias=False, backend='online')",
+                    "mode": "soft"
+                }
+            },
+            "sim_factor": 1.0,
+            "reg_factor_init": 0,
+
+            "reg_factor_decay": 6,
+            "static_epoch": 5,
+            "spline_kernel_obj": "point_interpolator.NadWatIsoSpline(exp_order=2,kernel_scale=0.05)",
+            "interp_kernel_obj": "point_interpolator.NadWatIsoSpline(exp_order=2,kernel_scale=0.005)",
+            "external_evaluate_metric_obj": "modelnet40_eval.evaluate_res()",
+            "print_step": 10,
+            "saving_running_result_visualize": true,
+            "geom_loss_opt_for_eval": {
+                "attr": "points",
+                "geom_obj": "geomloss.SamplesLoss(loss='sinkhorn',blur=0.01, scaling=0.8,reach=None, debias=False, backend='online')"
+            }
+        },
+        "optim": {
+            "type": "adam",
+            "lr": 0.001,
+            "adam": {
+                "betas": [
+                    0.9,
+                    0.999
+                ]
+            }
+        },
+        "scheduler": {
+            "type": "step_lr",
+            "step_lr": {
+                "gamma": 0.5,
+                "step_size": 60
+            }
+        },
+        "save_fig_on": true,
+        "is_train": true,
+        "reset_train_epoch": false,
+        "load_model_but_train_from_epoch": 0,
+        "continue_train": false,
+        "continue_train_lr": 2.5e-5,
+        "model_path":""
+    }
+}

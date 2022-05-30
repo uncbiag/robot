@@ -1,0 +1,130 @@
+{
+    "dataset": {
+        "name": "pair_dataset",
+        "pair_dataset": {
+            "reader" : "lung_dataloader_utils.lung_reader()",
+            "sampler" : "lung_dataloader_utils.lung_sampler(method='combined',scale=0.0003,num_sample=60000,sampled_by_weight=True)",
+            "normalizer": "lung_dataloader_utils.lung_normalizer(weight_scale=60000,scale=[100,100,100])",
+            "pair_postprocess_obj": "lung_dataloader_utils.lung_pair_postprocess()",
+            "max_num_for_loading": [-1,-1,-1,-1],
+            "load_training_data_into_memory": false,
+            "aug_data_via_inverse_reg_direction": false,
+            "place_postprocess_before_sampling": true
+        }
+    },
+    "tsk_set": {
+        "batch_sz": [
+            4,
+            4,
+            1,
+            4
+        ],
+        "epoch": 300,
+        "gpu_ids": 0,
+        "max_batch_num_per_epoch": [
+            400,
+            40,
+            40
+        ],
+        "model": "optimization",
+        "method_name": "discrete_flow_opt",
+        "loss_name": "geomloss",
+        "prepare_input_object": "",
+        "prepare_shape_pair": "shape_pair_utils.prepare_shape_pair(n_control_points=-1)",
+        "capture_plot_obj": "lung_visualizer.lung_capture_plotter(add_bg_contrast=False,camera_pos=[(-4.924379645467042, 2.17374925796456, 1.5003730890759344),(0.0, 0.0, 0.0),(0.40133888001174545, 0.31574165540339943, 0.8597873634998591)])",
+        "discrete_flow_opt": {
+            "print_step":1,
+            "gradient_flow_mode": true,
+            "drift_every_n_iter": 10,
+            "spline_kernel_obj":"point_interpolator.NadWatIsoSpline(exp_order=2,kernel_scale=0.05)",
+            "interp_kernel_obj": "point_interpolator.NadWatIsoSpline(exp_order=2,kernel_scale=0.05)",
+            "pair_feature_extractor_obj": "lung_feature_extractor.LungDeepFeatureExtractor(fixed=True)",
+            "fix_feature_using_initial_shape": true,
+            "running_result_visualize": false,
+            "saving_running_result_visualize": false,
+            "gradflow_guided": {
+                "mode": "ot_mapping",
+                "gradflow_blur_init": 0.01,
+                "update_gradflow_blur_by_raito": 0.5,
+                "gradflow_blur_min": 0.005,
+                "gradflow_reach_init": -1,
+                "update_gradflow_reach_by_raito": 0.8,
+                "gradflow_reach_min": 1.0,
+                "post_kernel_obj":  "point_interpolator.NadWatIsoSpline(exp_order=2,kernel_scale=0.05)",
+                "geomloss":{
+                    "attr": "pointfea",
+                    "mode": "soft",
+                    "geom_obj":"geomloss.SamplesLoss(loss='sinkhorn',blur=blurplaceholder, scaling=0.8,reach=reachplaceholder, debias=False, backend='online')"
+                }
+            },
+            "sim_factor": 100,
+            "init_reg_factor": 100,
+            "min_reg_factor": 1,
+            "decay_factor": 8,
+            "sim_loss": {
+                "loss_list": ["geomloss"],
+                "loss_weight_strategy_dict":{},
+                "loss_activate_epoch_list": [0],
+                "geomloss":{
+                    "attr": "points",
+                    "geom_obj": "geomloss.SamplesLoss(loss='sinkhorn',blur=0.1, scaling=0.8, debias=False, backend='online')"
+                }
+            },
+            "geom_loss_opt_for_eval": {
+                "attr": "points",
+                "geom_obj": "geomloss.SamplesLoss(loss='sinkhorn',blur=0.001, scaling=0.8,reach=0.5, debias=False, backend='online')"
+            },
+            "external_evaluate_metric_obj": "lung_data_eval.evaluate_res()"
+        },
+         "multi_scale_optimization_prealign": {
+            "point_grid_scales": [ -1],
+            "iter_per_scale": [1],
+            "rel_ftol_per_scale": [1e-9],
+            "init_lr_per_scale": [1e-1],
+            "save_3d_shape_every_n_iter": 20,
+            "save_2d_capture_every_n_iter": -1,
+            "stragtegy": "use_optimizer_defined_from_model"
+         },
+        "multi_scale_optimization": {
+            "save_res": false,
+            "point_grid_scales": [ -1],
+            "iter_per_scale": [1],
+            "rel_ftol_per_scale": [1e-9],
+            "init_lr_per_scale": [1e-1],
+            "save_3d_shape_every_n_iter": 20,
+            "save_2d_capture_every_n_iter": -1,
+            "shape_sampler_type": "point_grid",
+            "stragtegy": "use_optimizer_defined_from_model",
+             "optim": {
+                 "type": "sgd",
+                 "adam": {
+                     "betas": [
+                         0.9,
+                         0.999
+                     ]
+                 },
+                 "lbgfs": {
+                     "rel_ftol": 1e-7,
+                     "max_iter": 1,
+                     "max_eval": 5,
+                     "history_size": 5
+                 },
+                 "sgd": {
+                     "momentum": 0.9,
+                     "dampening": 0.0,
+                     "weight_decay": 0.0,
+                     "nesterov": true
+                 }
+             },
+            "scheduler": {
+                "type": "step_lr",
+                "step_lr": {
+                    "gamma": 0.5,
+                    "step_size": 30
+                }
+            }
+        },
+        "save_fig_on": true,
+        "is_train": false
+    }
+}

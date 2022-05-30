@@ -1,0 +1,135 @@
+{
+    "dataset": {
+        "name": "pair_dataset",
+        "pair_dataset": {
+            "aug_data_via_inverse_reg_direction": false,
+            "load_training_data_into_memory": false,
+            "max_num_for_loading": [
+                -1,
+                -1,
+                -1,
+                -1
+            ],
+            "normalizer": "flyingkitti_nonocc_utils.flyingkitti_nonocc_normalizer()",
+            "pair_postprocess_obj": "flyingkitti_nonocc_utils.flyingkitti_nonocc_pair_postprocess(flying3d=False)",
+            "reader": "flyingkitti_nonocc_utils.flyingkitti_nonocc_reader(flying3d=False)",
+            "sampler": "flyingkitti_nonocc_utils.flyingkitti_nonocc_sampler(num_sample=8192)"
+        }
+    },
+    "tsk_set": {
+        "batch_sz": [
+            12,
+            4,
+            8,
+            4
+        ],
+        "continue_train": false,
+        "continue_train_lr": 5e-05,
+        "capture_plot_obj": "visualizer.capture_plotter(render_by_weight=False,add_bg_contrast=True,camera_pos=[(12.24069705556629, 154.18144864069825, 52.5302855418096), (0.0, 0.0, 0.0), (0.17653893360765158, 0.08828369494012701, -0.9803264732365397)])",
+        "epoch": 500,
+        "flow_deep": {
+            "aniso_post_kernel_obj": "point_interpolator.NadWatAnisoSpline(exp_order=2, cov_sigma_scale=0.5,aniso_kernel_scale=1,eigenvalue_min=0.2,iter_twice=True, fixed=False, leaf_decay=True, is_interp=True, self_center=False)",
+            "deep_loss": "pwc_loss",
+            "deep_regparam_generator": "pwcnet_regparam",
+            "external_evaluate_metric_obj": "flyingkitti_nonocc_eval.evaluate_res(is_kitti=True)",
+            "flow_model": {
+                "model_type": "spline",
+                "spline": {
+                    "spline_kernel_obj": "point_interpolator.NadWatIsoSpline(exp_order=2,kernel_scale=[0.4,0.5, 0.8], kernel_weight=[0.2,0.3,0.5])"
+                }
+            },
+            "geom_loss_opt_for_eval": {
+                "attr": "points",
+                "geom_obj": "geomloss.SamplesLoss(loss='sinkhorn',blur=0.05, scaling=0.8,reach=0.8, debias=False, backend='online')"
+            },
+            "interp_kernel_obj": "point_interpolator.nadwat_kernel_interpolator(exp_order=2)",
+            "n_step": 1,
+            "prealign_opt": {
+                "gradflow_prealign": {
+                    "control_points": 2048,
+                    "geomloss": {
+                        "attr": "points",
+                        "geom_obj": "geomloss.SamplesLoss(loss='sinkhorn',blur=0.01, reach=None,scaling=0.8,debias=False, backend='online')"
+                    },
+                    "gradflow_mode": "grad_forward",
+                    "method_name": "rigid",
+                    "niter": 2,
+                    "search_init_transform": false
+                },
+                "module_type": "gradflow_prealign",
+                "print_step": 10
+            },
+            "print_step": 10,
+            "pwc_loss": {
+                "geomloss": {
+                    "geom_obj": "geomloss.SamplesLoss(loss='sinkhorn',blur=0.05, scaling=0.8,reach=None,debias=False, backend='online')"
+                },
+                "loss_type": "disp_l2",
+                "multi_scale_weight": [
+                    0.2,
+                    0.4,
+                    0.8,
+                    1.6
+                ]
+            },
+            "pwcnet_regparam": {
+                "delploy_original_model": false,
+                "initial_npoints": 2048,
+                "initial_radius": -1,
+                "input_channel": 3,
+                "load_pretrained_model": false,
+                "local_pair_feature_extractor_obj": "",
+                "param_shrink_factor": 1,
+                "predict_at_low_resl": true,
+                "pretrained_model_path": "",
+                "use_aniso_kernel": true
+            },
+            "reg_factor_decay": 8,
+            "reg_factor_init": 0.001,
+            "reg_param_scale": 1,
+            "running_result_visualize": false,
+            "saving_running_result_visualize": true,
+            "sim_factor": 10.0,
+            "step_weight_list": [
+                0.2,
+                0.8
+            ],
+            "use_prealign": true
+        },
+        "gpu_ids": [
+            0
+        ],
+        "is_train": false,
+        "load_model_but_train_from_epoch": 0,
+        "max_batch_num_per_epoch": [
+            400,
+            40,
+            40
+        ],
+        "method_name": "flow_deep",
+        "model": "deep_learning",
+        "model_path": "",
+        "optim": {
+            "adam": {
+                "betas": [
+                    0.9,
+                    0.999
+                ]
+            },
+            "lr": 0.001,
+            "type": "adam"
+        },
+        "output_root_path": "",
+        "reset_train_epoch": true,
+        "save_fig_on": false,
+        "scheduler": {
+            "step_lr": {
+                "gamma": 0.5,
+                "step_size": 100
+            },
+            "type": "step_lr"
+        },
+        "task_name": "deepflow_spline_8192_withaug_kitti_prealigned",
+        "val_period": 10
+    }
+}

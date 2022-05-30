@@ -1,0 +1,139 @@
+{
+    "dataset": {
+        "name": "pair_dataset",
+        "pair_dataset": {
+            "reader" : "lung_dataloader_utils.lung_reader()",
+            "sampler" : "lung_dataloader_utils.lung_sampler( method='combined',scale=0.0003,num_sample=60000,sampled_by_weight=True)",
+            "normalizer": "lung_dataloader_utils.lung_normalizer(weight_scale=60000,scale=[100,100,100])",
+            "pair_postprocess_obj": "lung_dataloader_utils.lung_pair_postprocess()",
+            "max_num_for_loading": [800,20,20,-1],
+            "enlarge_dataset_size_by_factor": 100,
+            "load_training_data_into_memory": true,
+            "aug_data_via_inverse_reg_direction": false
+        }
+    },
+    "tsk_set": {
+        "batch_sz": [
+            2,
+            4,
+            1,
+            4
+        ],
+        "epoch": 300,
+        "gpu_ids": 0,
+        "max_batch_num_per_epoch": [
+            400,
+            4,
+            4
+        ],
+        "model": "deep_learning",
+        "method_name": "flow_deep",
+        "prepare_input_object": "hybird_data.HybirdData(synthsizer_obj='lung_data_aug.lung_synth_data(do_rigid_aug=False)', data_aug_obj='lung_data_aug.lung_aug_data()', raw_source_target_has_corr=False,corr_sampled_source_target=False, synth_ratio=1.0, ratio_decay_rate=200, min_synth_ratio=0.3,npoints=-1)",
+        "capture_plot_obj": "lung_visualizer.lung_capture_plotter(add_bg_contrast=False,camera_pos=[(-4.924379645467042, 2.17374925796456, 1.5003730890759344),(0.0, 0.0, 0.0),(0.40133888001174545, 0.31574165540339943, 0.8597873634998591)])",
+        "val_period": 5,
+        "flow_deep": {
+            "running_result_visualize": false,
+            "deep_regparam_generator": "pwcnet_regparam",
+            "deep_loss": "pwc_loss",
+            "external_evaluate_metric_obj": "lung_data_eval.evaluate_res()",
+            "n_step": 1,
+            "step_weight_list": [1.0,0.8,0.8],
+            "use_prealign": true,
+            "prealign_opt": {
+                "module_type": "gradflow_prealign",
+                "print_step": 10,
+                "gradflow_prealign": {
+                    "gradflow_mode": "grad_forward",
+                    "niter": 1,
+                    "search_init_transform": false,
+                    "geomloss": {
+                        "attr": "points",
+                        "geom_obj": "geomloss.SamplesLoss(loss='sinkhorn',blur=0.01, reach=None,scaling=0.8,debias=False,backend='online')"
+                    }
+                }
+            },
+            "pwcnet_regparam": {
+                "local_pair_feature_extractor_obj": "lung_feature_extractor.get_naive_lung_feature()",
+                "input_channel": 4,
+                "neigh_num": 9,
+                "weight_net_neigh_num": 9,
+                "pwc_mode": "reg_param",
+                "delploy_original_model": false,
+                "predict_at_low_resl": true,
+                "initial_npoints": 8192,
+                "initial_radius": -1,
+                "param_shrink_factor": 1,
+                "use_aniso_kernel": true
+            },
+            "flow_model": {
+                "model_type": "lddmm",
+                "spline": {
+                    "spline_kernel_obj": "point_interpolator.NadWatIsoSpline(exp_order=2,kernel_scale=[0.005,0.01,0.02], kernel_weight=[0.2,0.3,0.5])"
+                },
+                "lddmm": {
+                    "module": "variational",
+                    "hamiltonian": {
+                        "kernel": "keops_kernels.LazyKeopsKernel(kernel_type='multi_gauss', sigma_list=[0.05,0.08,0.1],weight_list=[0.2,0.3,0.5])"
+                        },
+                    "variational": {
+                        "kernel": "keops_kernels.LazyKeopsKernel(kernel_type='multi_gauss', sigma_list=[0.03,0.06,0.09],weight_list=[0.2,0.3,0.5])"
+                        },
+                    "integrator":{}
+                },
+                "use_aniso_postgradientflow": false,
+                "aniso_postgradientflow": {
+                    "aniso_kernel_obj":"point_interpolator.NadWatAnisoSpline(exp_order=2, cov_sigma_scale=0.02,aniso_kernel_scale=0.05,eigenvalue_min=0.2,iter_twice=True, fixed=False, leaf_decay=False, is_interp=True, self_center=True)",
+                    "geomloss": {
+                        "attr": "points",
+                        "use_bary_map": true,
+                        "geom_obj": "geomloss.SamplesLoss(loss='sinkhorn',blur=0.001, reach=0.5,scaling=0.8,debias=False,backend='online')"
+                    }
+                }
+            },
+            "pwc_loss": {
+                "multi_scale_weight": [0.2, 0.4, 0.8, 1.6],
+                "loss_type": "disp_l2",
+                "geomloss": {
+                    "geom_obj": "geomloss.SamplesLoss(loss='sinkhorn',blur=0.001, scaling=0.8,reach=None,debias=False,backend='online')"
+                }
+            },
+
+            "sim_factor": 100.0,
+            "reg_factor_init": 0.01,
+            "reg_factor_decay": 8,
+            "reg_param_scale": 0.01,
+            "static_epoch": 20,
+            "print_step": 10,
+            "saving_running_result_visualize": true,
+            "geom_loss_opt_for_eval": {
+                "attr": "points",
+                "geom_obj": "geomloss.SamplesLoss(loss='sinkhorn',blur=0.001, scaling=0.8,reach=0.1, debias=False,backend='online')"
+            },
+            "aniso_post_kernel_obj": "point_interpolator.NadWatAnisoSpline(exp_order=2, cov_sigma_scale=0.02,aniso_kernel_scale=0.08,eigenvalue_min=0.3,iter_twice=True, fixed=False, leaf_decay=True, is_interp=True, self_center=False)"
+        },
+        "optim": {
+            "type": "adam",
+            "lr": 1e-3,
+            "adam": {
+                "betas": [
+                    0.9,
+                    0.999
+                ]
+            }
+        },
+        "scheduler": {
+            "type": "step_lr",
+            "step_lr": {
+                "gamma": 0.5,
+                "step_size": 60
+            }
+        },
+        "save_fig_on": false,
+        "is_train": true,
+        "reset_train_epoch": true,
+        "load_model_but_train_from_epoch": 20,
+        "continue_train": false,
+        "continue_train_lr": 5e-5,
+        "model_path":""
+    }
+}
